@@ -10,9 +10,28 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(resp, 'home.html')
 
     def test_can_save_post_request(self):
+        self.client.post('/', data={'item_text': 'A new list item'})
+
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, 'A new list item')
+
+    def test_redirect_after_POST(self):
         resp = self.client.post('/', data={'item_text': 'A new list item'})
-        self.assertIn('A new list item', resp.content.decode())
-        self.assertTemplateUsed(resp, 'home.html')
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp['location'], '/')
+
+    def test_only_saves_items_when_necessary(self):
+        self.client.get('/')
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_displays_all_list_items(self):
+        Item.objects.create(text='Item 1')
+        Item.objects.create(text='Item 2')
+
+        resp = self.client.get('/')
+        self.assertIn('Item 1', resp.content.decode())
+        self.assertIn('Item 2', resp.content.decode())
 
 
 class ItemModelTest(TestCase):
