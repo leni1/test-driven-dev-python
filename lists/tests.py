@@ -6,7 +6,7 @@ from lists.models import Item, List
 class HomePageTest(TestCase):
 
     def test_home_page_returns_correct_html(self):
-        resp = self.client.get('/')
+        resp = self.client.get('/lists/')
         self.assertTemplateUsed(resp, 'home.html')
 
 
