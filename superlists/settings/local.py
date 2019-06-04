@@ -23,48 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
-_FALSE_STRINGS = [
-    "no",
-    "false",
-    "off",
-    "0",
-]
+DEBUG = True
 
-
-def getenv_bool(setting_name):
-    """
-    Get a boolean from an environment variable.
-
-    Why use this and not just `bool(os.getenv("X"))`?  It would be quite
-    reasonable to see `DEBUG=true`, and infer that setting `DEBUG=false` would
-    Do The Right Thing; however `bool("false") == True`.
-
-    This function attempts to do basic "is the string falsey" detection so
-    `DEBUG=false` behaves as expected
-    """
-
-    if setting_name not in os.environ:
-        return False
-
-    var = os.environ[setting_name]
-
-    return not (var.lower() in _FALSE_STRINGS)
-
-
-DEBUG = getenv_bool('DEBUG')
-
-if not DEBUG:
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 60
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = "DENY"
-
-# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
@@ -163,3 +123,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
