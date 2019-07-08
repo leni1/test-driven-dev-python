@@ -64,8 +64,9 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = "DENY"
 
-# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
-ALLOWED_HOSTS = ['*.compute-1.amazonaws.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.getenv('SITENAME')
+# TODO: remove commented out line below if exporting localhost works as well
+# ALLOWED_HOSTS = ['*.compute-1.amazonaws.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
